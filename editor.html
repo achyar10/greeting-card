@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en" class="h-100">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="Achyar Anshorie">
+    <title>Starter App</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/assets/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/assets/css/custom.css" rel="stylesheet">
+
+    <!-- Favicons -->
+    <meta name="theme-color" content="#7952b3">
+</head>
+
+<body class="d-flex flex-column h-100">
+
+    <header>
+        <!-- Fixed navbar -->
+        <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="index.html">Greeting Card Maker</a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Begin page content -->
+    <div class="container mt-5">
+        <div class="card mt-5">
+            <div class="card-header">
+                <h6>Tuliskan Ucapanmu</h6>
+            </div>
+            <div class="card-body">
+                <div class="row mt-2">
+                    <div class="col-md-5">
+                        <img src="https://previews.123rf.com/images/seamartini/seamartini1812/seamartini181200049/127240887-frame-for-christmas-greeting-card-with-blank-space-for-wishes-gingerbread-cookies-and-candle-gift-bo.jpg"
+                            id="imgtes" alt="img" class="bd-placeholder-img card-img-top" width="100%" height="225">
+                    </div>
+                    <div class="col-md-7">
+                        <div class="form-group mb-2">
+                            <label for="">Teks</label>
+                            <textarea name="free_text" id="free_text" class="form-control">Selamat Tahun Baru</textarea>
+                        </div>
+                        <button class="btn btn-success btn-sm" onclick="saveImage()"><i class="fa fa-download"></i>
+                            Download File</button>
+                        <button class="btn btn-primary btn-sm"><i class="fa-solid fa-share-nodes"></i>
+                            Share</button>
+                        <a href="theme.html" class="btn btn-secondary btn-sm"><i class="fa-solid fa-arrow-left"></i>
+                            Kembali</a>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer mt-auto py-3 bg-light">
+        <div class="container">
+            <span class="text-muted">Footer</span>
+        </div>
+    </footer>
+
+    <script src="/assets/js/bootstrap.bundle.min.js"></script>
+    <script src="/assets/js/watermark.min.js"></script>
+    <script src="https://kit.fontawesome.com/b27a94bbfa.js" crossorigin="anonymous"></script>
+
+    <script>
+
+        const free_text = document.querySelector('#free_text');
+
+        const options = {
+            init(img) {
+                img.crossOrigin = 'anonymous'
+            }
+        };
+
+        free_text.addEventListener('keyup', (e) => {
+            const text = e.target.value;
+
+            watermark(['https://previews.123rf.com/images/seamartini/seamartini1812/seamartini181200049/127240887-frame-for-christmas-greeting-card-with-blank-space-for-wishes-gingerbread-cookies-and-candle-gift-bo.jpg'], options)
+                .image(watermark.text.center(text, '50px serif', '#000', 1))
+                .then(function (img) {
+                    document.getElementById('imgtes').src = img.src;
+                });
+        })
+
+        watermark(['https://previews.123rf.com/images/seamartini/seamartini1812/seamartini181200049/127240887-frame-for-christmas-greeting-card-with-blank-space-for-wishes-gingerbread-cookies-and-candle-gift-bo.jpg'], options)
+            .image(watermark.text.center(free_text.value, '50px serif', '#000', 1))
+            .then(function (img) {
+                document.getElementById('imgtes').src = img.src;
+            });
+
+        function saveImage() {
+            var a = document.createElement('a');
+            a.href = document.getElementById('imgtes').src;
+            a.download = `${new Date().getTime()}.png`;
+            a.click()
+        }
+
+
+    </script>
+
+</body>
+
+</html>
