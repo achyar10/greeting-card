@@ -23,24 +23,43 @@
         <h1 class="display-6 fw-bold text-center">Hello there, text here</h1>
         <div class="row mt-4">
             <div class="col-md-5">
-                <img src="/assets/images/eid.png" id="imgtes" alt="img" class="bd-placeholder-img card-img-top" width="100%">
+                <img src="/assets/images/eid.png" id="imgtes" alt="img" class="bd-placeholder-img card-img-top"
+                    width="100%">
             </div>
             <div class="col-md-5">
-                <div class="form-group mb-2">
-                    <label for="" class="fw-bold">Text</label>
-                    <select name="" id="" class="form-select mb-2">
-                        <option value="serif">Poppins</option>
-                    </select>
-                    <textarea name="free_text" id="free_text" class="form-control" placeholder="Edit text here...">Edit text here...</textarea>
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group mb-2">
+                            <label for="" class="fw-bold">Text</label>
+                            <select name="" id="" class="form-select mb-2">
+                                <option value="serif">Poppins</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group mb-2">
+                            <label for="" class="fw-bold">Align</label><br>
+                            <div class="btn-group" role="group" aria-label="Basic outlined example">
+                                <button type="button" class="btn btn-outline-secondary"><i class="fa-solid fa-align-left"></i></button>
+                                <button type="button" class="btn btn-outline-secondary"><i class="fa-solid fa-align-center"></i></button>
+                                <button type="button" class="btn btn-outline-secondary"><i class="fa-solid fa-align-right"></i></button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <button class="btn btn-primary rounded-pill px-4 btn-sm" onclick="saveImage()"><i class="fa fa-download"></i>
+                <div class="form-group mb-2">
+                    <textarea name="free_text" id="free_text" class="form-control"
+                        placeholder="Edit text here...">Edit text here...</textarea>
+                </div>
+                <button class="btn btn-primary rounded-pill px-4 btn-sm" onclick="saveImage()"><i
+                        class="fa fa-download"></i>
                     Save</button>
                 <button class="btn btn-danger rounded-pill px-4 btn-sm"><i class="fa-solid fa-share-nodes"></i>
                     Share</button>
                 <button class="btn btn-warning rounded-pill px-4 btn-sm text-white"><i class="fa fa-envelope"></i>
                     Send</button>
             </div>
-        
+
         </div>
     </div>
 
