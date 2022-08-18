@@ -21,85 +21,108 @@
     <!-- Begin page content -->
     <div class="container mt-3">
         <h1 class="display-6 fw-bold text-center">Hello there, text here</h1>
-        <div class="row mt-4">
-            <div class="col-md-5">
-                <img src="/assets/images/eid.png" id="imgtes" alt="img" class="bd-placeholder-img card-img-top"
-                    width="100%">
-            </div>
-            <div class="col-md-5">
-                <div class="row">
-                    <div class="col">
-                        <div class="form-group mb-2">
-                            <label for="" class="fw-bold">Text</label>
-                            <select name="" id="" class="form-select mb-2">
-                                <option value="serif">Poppins</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col">
-                        <div class="form-group mb-2">
-                            <label for="" class="fw-bold">Align</label><br>
-                            <div class="btn-group" role="group" aria-label="Basic outlined example">
-                                <button type="button" class="btn btn-outline-secondary"><i class="fa-solid fa-align-left"></i></button>
-                                <button type="button" class="btn btn-outline-secondary"><i class="fa-solid fa-align-center"></i></button>
-                                <button type="button" class="btn btn-outline-secondary"><i class="fa-solid fa-align-right"></i></button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group mb-2">
-                    <textarea name="free_text" id="free_text" class="form-control"
-                        placeholder="Edit text here...">Edit text here...</textarea>
-                </div>
-                <button class="btn btn-primary rounded-pill px-4 btn-sm" onclick="saveImage()"><i
-                        class="fa fa-download"></i>
-                    Save</button>
-                <button class="btn btn-danger rounded-pill px-4 btn-sm"><i class="fa-solid fa-share-nodes"></i>
-                    Share</button>
-                <button class="btn btn-warning rounded-pill px-4 btn-sm text-white"><i class="fa fa-envelope"></i>
-                    Send</button>
-            </div>
-
+        <div id="editor_container"></div>
+        <div class="text-center mt-3" id="btn-share" style="display: none;">
+            <a href="whatsapp://send?text=" id="wa" class="btn btn-danger rounded-pill px-4 btn-sm"><i class="fa-solid fa-share-nodes"></i>
+                Share</a>
+            <a href="mailto:" class="btn btn-warning rounded-pill px-4 btn-sm text-white"><i class="fa fa-envelope"></i>
+                Send</a>
+            <a href="/theme.html" class="btn btn-secondary rounded-pill px-4 btn-sm"><i class="fa-solid fa-arrow-left"></i>
+                Kembali</a>
         </div>
     </div>
 
 
     <script src="/assets/js/bootstrap.bundle.min.js"></script>
-    <script src="/assets/js/watermark.min.js"></script>
     <script src="https://kit.fontawesome.com/b27a94bbfa.js" crossorigin="anonymous"></script>
+    <script
+        src="https://scaleflex.cloudimg.io/v7/plugins/filerobot-image-editor/latest/filerobot-image-editor.min.js"></script>
 
     <script>
-
-        const free_text = document.querySelector('#free_text');
-
-        const options = {
-            init(img) {
-                img.crossOrigin = 'anonymous'
-            }
+        let image = null;
+        const { TABS, TOOLS } = FilerobotImageEditor;
+        const config = {
+            source: '/assets/images/eid.png',
+            onSave: (imageInfo, designState) => {
+                const tmpLink = document.createElement("a");
+                tmpLink.download = imageInfo.fullName;
+                tmpLink.href = imageInfo.imageBase64;
+                image = imageInfo.imageBase64;
+                tmpLink.style = "position: absolute; z-index: -111; visibility: none;";
+                document.body.appendChild(tmpLink);
+                tmpLink.click();
+                document.body.removeChild(tmpLink);
+                const btn_share = document.querySelector('#btn-share');
+                btn_share.style.display = 'block';
+            },
+            annotationsCommon: {
+                fill: '#ff0000',
+            },
+            Text: { text: 'Edit text here...' },
+            Rotate: { angle: 90, componentType: 'slider' },
+            translations: {
+                profile: 'Profile',
+                coverPhoto: 'Cover photo',
+                facebook: 'Facebook',
+                socialMedia: 'Social Media',
+                fbProfileSize: '1080x1080px',
+                fbCoverPhotoSize: '820x312px',
+            },
+            Crop: {
+                presetsItems: [
+                    {
+                        titleKey: 'Post Instagram',
+                        descriptionKey: '1:1',
+                        ratio: 1 / 1,
+                    },
+                    {
+                        titleKey: 'cinemascope',
+                        descriptionKey: '21:9',
+                        ratio: 21 / 9,
+                    },
+                ],
+                presetsFolders: [
+                    {
+                        titleKey: 'socialMedia',
+                        groups: [
+                            {
+                                titleKey: 'instagram',
+                                items: [
+                                    {
+                                        titleKey: 'post',
+                                        width: 1080,
+                                        height: 1080,
+                                        descriptionKey: 'fbProfileSize',
+                                    },
+                                    {
+                                        titleKey: 'coverPhoto',
+                                        width: 820,
+                                        height: 312,
+                                        descriptionKey: 'fbCoverPhotoSize',
+                                    },
+                                ],
+                            },
+                        ],
+                    },
+                ],
+            },
+            tabsIds: [TABS.ADJUST, TABS.ANNOTATE, TABS.WATERMARK, TABS.RESIZE, TABS.FILTERS,], // or ['Adjust', 'Annotate', 'Watermark']
+            defaultTabId: TABS.ANNOTATE, // or 'Annotate'
+            defaultToolId: TOOLS.TEXT, // or 'Text'
         };
 
-        free_text.addEventListener('keyup', (e) => {
-            const text = e.target.value;
+        // Assuming we have a div with id="editor_container"
+        const filerobotImageEditor = new FilerobotImageEditor(
+            document.querySelector('#editor_container'),
+            config,
+        );
 
-            watermark(['assets/images/eid.png'], options)
-                .image(watermark.text.center(text, '50px serif', '#fff', 1))
-                .then(function (img) {
-                    document.getElementById('imgtes').src = img.src;
-                });
-        })
-
-        watermark(['assets/images/eid.png'], options)
-            .image(watermark.text.center(free_text.value, '50px serif', '#fff', 1))
-            .then(function (img) {
-                document.getElementById('imgtes').src = img.src;
-            });
-
-        function saveImage() {
-            var a = document.createElement('a');
-            a.href = document.getElementById('imgtes').src;
-            a.download = `${new Date().getTime()}.png`;
-            a.click()
-        }
+        filerobotImageEditor.render({
+            onClose: (closingReason) => {
+                console.log('Closing reason', closingReason);
+                filerobotImageEditor.terminate();
+            },
+        });
 
 
     </script>
