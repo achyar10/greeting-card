@@ -23,11 +23,11 @@
         <h1 class="display-6 fw-bold text-center">Hello there, text here</h1>
         <div id="editor_container"></div>
         <div class="text-center mt-3" id="btn-share" style="display: none;">
-            <a href="whatsapp://send?text=" id="wa" class="btn btn-danger rounded-pill px-4 btn-sm"><i class="fa-solid fa-share-nodes"></i>
-                Share</a>
-            <a href="mailto:" class="btn btn-warning rounded-pill px-4 btn-sm text-white"><i class="fa fa-envelope"></i>
-                Send</a>
-            <a href="/theme.html" class="btn btn-secondary rounded-pill px-4 btn-sm"><i class="fa-solid fa-arrow-left"></i>
+            <button id="" onclick="share()" class="btn btn-danger rounded-pill px-4 btn-sm"><i
+                    class="fa-solid fa-share-nodes"></i>
+                Share</button>
+            <a href="/theme.html" class="btn btn-secondary rounded-pill px-4 btn-sm"><i
+                    class="fa-solid fa-arrow-left"></i>
                 Kembali</a>
         </div>
     </div>
@@ -40,10 +40,11 @@
 
     <script>
         let image = null;
+        let files = null;
         const { TABS, TOOLS } = FilerobotImageEditor;
         const config = {
             source: '/assets/images/eid.png',
-            onSave: (imageInfo, designState) => {
+            onSave: async (imageInfo, designState) => {
                 const tmpLink = document.createElement("a");
                 tmpLink.download = imageInfo.fullName;
                 tmpLink.href = imageInfo.imageBase64;
@@ -52,6 +53,8 @@
                 document.body.appendChild(tmpLink);
                 tmpLink.click();
                 document.body.removeChild(tmpLink);
+                const blob = await (await fetch(image)).blob();
+                files = new File([blob], 'fileName.png', { type: blob.type });
                 const btn_share = document.querySelector('#btn-share');
                 btn_share.style.display = 'block';
             },
@@ -123,6 +126,21 @@
                 filerobotImageEditor.terminate();
             },
         });
+
+        async function share() {
+            try {
+                await navigator.share(
+                    {
+                        title: 'Hello',
+                        text: 'Check out this image!',
+                        files: [files],
+                    }
+                );
+                console.log('shared successfully')
+            } catch (err) {
+                alert(`Your system doesn't support sharing these files.`)
+            }
+        }
 
 
     </script>
